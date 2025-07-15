@@ -1,0 +1,25 @@
+@import 'tailwindcss';
+
+:root  {
+  --color1: #6366f1;
+  --color2: #f7f8f9;
+  --color3: rgb(48, 46, 46);
+  --color4: rgb(1, 1, 44);
+  --color5: rgb(139, 131, 131);
+  --color6: #7e80f7;
+  --color7: rgb(75 85 99 / 1);
+  --color8: hsl(210,40%,96.1%);
+  --color9: #6366f11a;
+  --color10: hsl(222.2, 47.4%, 11.2%);
+  --color11: rgb(55, 65, 81);
+  --color12: rgb(243, 244, 246);
+  --color13: rgb(226, 232, 240);
+  --color14: rgb(2, 8, 23);
+  --color15: rgb(31,41,55);
+  --color16: rgb(156 163 175 / 1);
+  --color17: rgb(107, 114, 128);
+  --accent: hsl(240, 4.8%, 95.9%);
+  --border: hsl(240, 5.9%, 90%);
+  --bg-flashcard-review: #e8efff;
+  --white: #fff;
+}
