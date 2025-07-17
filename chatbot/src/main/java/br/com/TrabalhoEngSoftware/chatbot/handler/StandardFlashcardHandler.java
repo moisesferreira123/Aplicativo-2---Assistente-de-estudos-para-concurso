@@ -35,6 +35,7 @@ public class StandardFlashcardHandler implements FlashcardTypeHandler<StandardFl
     flashcard.setRepetition(0);
     flashcard.setEaseFactor(2.5);
     flashcard.setInterval(1);
+    
     return flashcard;
   }
 

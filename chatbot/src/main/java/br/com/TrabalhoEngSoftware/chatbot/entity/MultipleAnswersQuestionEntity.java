@@ -25,7 +25,7 @@ public class MultipleAnswersQuestionEntity extends FlashcardEntity {
   @ElementCollection
   @CollectionTable(name = "multiple_answers_options", joinColumns = @JoinColumn(name = "flashcard_id"))
   @Column(nullable = false)
-	private List<Integer> correctAnswersIndex;
+	private List<Integer> correctAnswerIndices;
 
   @Column(nullable = false)
 	private LocalDateTime nextReview;
@@ -67,12 +67,12 @@ public class MultipleAnswersQuestionEntity extends FlashcardEntity {
     this.answerOptions = answerOptions;
   }
 
-  public List<Integer> getCorrectAnswersIndex() {
-    return correctAnswersIndex;
+  public List<Integer> getCorrectAnswerIndices() {
+    return correctAnswerIndices;
   }
 
-  public void setCorrectAnswersIndex(List<Integer> correctAnswersIndex) {
-    this.correctAnswersIndex = correctAnswersIndex;
+  public void setCorrectAnswerIndices(List<Integer> correctAnswerIndices) {
+    this.correctAnswerIndices = correctAnswerIndices;
   }
 
   public LocalDateTime getNextReview() {
