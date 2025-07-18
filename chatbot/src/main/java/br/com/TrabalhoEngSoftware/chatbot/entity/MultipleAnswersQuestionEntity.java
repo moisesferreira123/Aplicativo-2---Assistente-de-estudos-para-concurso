@@ -18,12 +18,12 @@ public class MultipleAnswersQuestionEntity extends FlashcardEntity {
 	private String question;
 
   @ElementCollection
-  @CollectionTable(name = "multiple_answers_options", joinColumns = @JoinColumn(name = "flashcard_id"))
+  @CollectionTable(name = "multiple_answer_options", joinColumns = @JoinColumn(name = "flashcard_id"))
   @Column(nullable = false)
   private List<String> answerOptions;
 
   @ElementCollection
-  @CollectionTable(name = "multiple_answers_options", joinColumns = @JoinColumn(name = "flashcard_id"))
+  @CollectionTable(name = "correct-answer-indices", joinColumns = @JoinColumn(name = "flashcard_id"))
   @Column(nullable = false)
 	private List<Integer> correctAnswerIndices;
 
