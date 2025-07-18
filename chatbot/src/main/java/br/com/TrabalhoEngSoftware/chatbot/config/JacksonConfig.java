@@ -9,8 +9,13 @@ import com.fasterxml.jackson.databind.jsontype.NamedType;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
+import br.com.TrabalhoEngSoftware.chatbot.dto.DiscursiveQuestionDTO;
+import br.com.TrabalhoEngSoftware.chatbot.dto.MultipleAnswersQuestionDTO;
+import br.com.TrabalhoEngSoftware.chatbot.dto.MultipleChoiceQuestionDTO;
+import br.com.TrabalhoEngSoftware.chatbot.dto.RightWrongQuestionDTO;
 import br.com.TrabalhoEngSoftware.chatbot.dto.StandardFlashcardDTO;
 import br.com.TrabalhoEngSoftware.chatbot.dto.StandardUserAnswerDTO;
+import br.com.TrabalhoEngSoftware.chatbot.dto.TrueFalseQuestionDTO;
 
 @Configuration
 public class JacksonConfig {
@@ -21,11 +26,21 @@ public class JacksonConfig {
     SimpleModule module = new SimpleModule();
 
     module.registerSubtypes(
-      new NamedType(StandardFlashcardDTO.class, "STANDARD_FLASHCARD")
+      new NamedType(StandardFlashcardDTO.class, "STANDARD_FLASHCARD"),
+      new NamedType(TrueFalseQuestionDTO.class, "TRUE_FALSE_QUESTION"),
+      new NamedType(RightWrongQuestionDTO.class, "RIGHT_WRONG_QUESTION"),
+      new NamedType(MultipleChoiceQuestionDTO.class, "MULTIPLE_CHOICE_QUESTION"),
+      new NamedType(MultipleAnswersQuestionDTO.class, "MULTIPLE_ANSWERS_QUESTION"),
+      new NamedType(DiscursiveQuestionDTO.class, "DISCURSIVE_QUESTION")
     );
 
     module.registerSubtypes(
-      new NamedType(StandardUserAnswerDTO.class, "STANDARD_FLASHCARD")
+      new NamedType(StandardUserAnswerDTO.class, "STANDARD_FLASHCARD"),
+      new NamedType(TrueFalseQuestionDTO.class, "TRUE_FALSE_QUESTION"),
+      new NamedType(RightWrongQuestionDTO.class, "RIGHT_WRONG_QUESTION"),
+      new NamedType(MultipleChoiceQuestionDTO.class, "MULTIPLE_CHOICE_QUESTION"),
+      new NamedType(MultipleAnswersQuestionDTO.class, "MULTIPLE_ANSWERS_QUESTION"),
+      new NamedType(DiscursiveQuestionDTO.class, "DISCURSIVE_QUESTION")
     );
 
     objectMapper.registerModule(module);

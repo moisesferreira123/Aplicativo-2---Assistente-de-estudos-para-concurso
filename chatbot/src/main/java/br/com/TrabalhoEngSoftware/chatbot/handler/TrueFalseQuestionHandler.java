@@ -1,9 +1,13 @@
 package br.com.TrabalhoEngSoftware.chatbot.handler;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.List;
 
 import org.springframework.stereotype.Component;
 
+import br.com.TrabalhoEngSoftware.chatbot.config.Constants;
 import br.com.TrabalhoEngSoftware.chatbot.dto.TrueFalseQuestionDTO;
 import br.com.TrabalhoEngSoftware.chatbot.dto.TrueFalseUserAnswerDTO;
 import br.com.TrabalhoEngSoftware.chatbot.entity.TrueFalseQuestionEntity;
@@ -45,7 +49,48 @@ public class TrueFalseQuestionHandler implements FlashcardTypeHandler<TrueFalseQ
 
   @Override
   public void evaluateAnswer(TrueFalseQuestionEntity trueFalseQuestion, TrueFalseUserAnswerDTO answer) {
-    // TODO: Fazer
+    if(trueFalseQuestion.getStatements().size() != answer.getAnswerList().size()) {
+      throw new InvalidObjectDataException("Statement list and user answer list sizes can't be different");
+    }
+
+    LocalDateTime tomorrow = LocalDate.now().plusDays(1).atStartOfDay();
+    float numberCorrectAnswer = 0;
+    List<Boolean> answersList = trueFalseQuestion.getTrueFalseAnswers();
+    List<Boolean> userAnswersList = answer.getAnswerList();
+    
+    for(int i=0; i<answersList.size(); i++) {
+      if(answersList.get(i) == userAnswersList.get(i)) {
+        numberCorrectAnswer++;
+      }
+    }
+    
+    double correctPercentage = numberCorrectAnswer/answersList.size();
+    double easeFactor = trueFalseQuestion.getEaseFactor();
+    
+    if(correctPercentage <= 0.3) {
+      if(LocalDateTime.now().plusMinutes(60L).isBefore(tomorrow)){
+        trueFalseQuestion.setNextReview(LocalDateTime.now().plusMinutes(60L));
+      } else {
+        trueFalseQuestion.setNextReview(LocalDate.now().atTime(LocalTime.MAX));
+      }
+      trueFalseQuestion.setEaseFactor(calculateEaseFactor(easeFactor, Constants.WRONG));
+      trueFalseQuestion.setInterval(1);
+      return;
+    }
+    trueFalseQuestion.setNextReview(LocalDateTime.now().plusDays(trueFalseQuestion.getInterval()));
+    if(correctPercentage < 0.7) {
+      trueFalseQuestion.setEaseFactor(calculateEaseFactor(easeFactor, Constants.HARD));
+    } else if(correctPercentage < 1) {
+      trueFalseQuestion.setEaseFactor(calculateEaseFactor(easeFactor, Constants.GOOD));
+    } else {
+      trueFalseQuestion.setEaseFactor(calculateEaseFactor(easeFactor, Constants.EASY));
+    }
+    trueFalseQuestion.setInterval((int) Math.ceil(trueFalseQuestion.getInterval()*trueFalseQuestion.getEaseFactor()));
+  }
+
+  private double calculateEaseFactor(double easeFactor, int answer) {
+    double easeFactorTemp = easeFactor - 0.8 + (0.28*answer) - (0.02*Math.pow(answer,2));
+    return Math.max(Constants.MIN_EASE_FACTOR, easeFactorTemp);
   }
 
   @Override

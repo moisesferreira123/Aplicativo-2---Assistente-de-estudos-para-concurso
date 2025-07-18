@@ -1,9 +1,12 @@
 package br.com.TrabalhoEngSoftware.chatbot.handler;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 import org.springframework.stereotype.Component;
 
+import br.com.TrabalhoEngSoftware.chatbot.config.Constants;
 import br.com.TrabalhoEngSoftware.chatbot.dto.MultipleChoiceQuestionDTO;
 import br.com.TrabalhoEngSoftware.chatbot.dto.MultipleChoiceUserAnswerDTO;
 import br.com.TrabalhoEngSoftware.chatbot.entity.MultipleChoiceQuestionEntity;
@@ -45,7 +48,27 @@ public class MultipleChoiceQuestionHandler implements FlashcardTypeHandler<Multi
 
   @Override
   public void evaluateAnswer(MultipleChoiceQuestionEntity multipleChoiceQuestion, MultipleChoiceUserAnswerDTO answer) {
-    // TODO: Fazer
+    LocalDateTime tomorrow = LocalDate.now().plusDays(1).atStartOfDay();
+    double easeFactor = multipleChoiceQuestion.getEaseFactor();
+
+    if(multipleChoiceQuestion.getCorrectAnswerIndex() == answer.getAnswer()) {
+      if(LocalDateTime.now().plusMinutes(60L).isBefore(tomorrow)){
+        multipleChoiceQuestion.setNextReview(LocalDateTime.now().plusMinutes(60L));
+      } else {
+        multipleChoiceQuestion.setNextReview(LocalDate.now().atTime(LocalTime.MAX));
+      }
+      multipleChoiceQuestion.setEaseFactor(calculateEaseFactor(easeFactor, Constants.WRONG));
+      multipleChoiceQuestion.setInterval(1);
+    } else {
+      multipleChoiceQuestion.setNextReview(LocalDateTime.now().plusDays(multipleChoiceQuestion.getInterval()));
+      multipleChoiceQuestion.setEaseFactor(calculateEaseFactor(easeFactor, Constants.GOOD));
+      multipleChoiceQuestion.setInterval((int) Math.ceil(multipleChoiceQuestion.getInterval()*multipleChoiceQuestion.getEaseFactor()));
+    }
+  }
+
+  private double calculateEaseFactor(double easeFactor, int answer) {
+    double easeFactorTemp = easeFactor - 0.8 + (0.28*answer) - (0.02*Math.pow(answer,2));
+    return Math.max(Constants.MIN_EASE_FACTOR, easeFactorTemp);
   }
 
   @Override

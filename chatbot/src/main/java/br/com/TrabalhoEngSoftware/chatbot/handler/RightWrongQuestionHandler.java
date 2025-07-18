@@ -1,9 +1,12 @@
 package br.com.TrabalhoEngSoftware.chatbot.handler;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 import org.springframework.stereotype.Component;
 
+import br.com.TrabalhoEngSoftware.chatbot.config.Constants;
 import br.com.TrabalhoEngSoftware.chatbot.dto.RightWrongQuestionDTO;
 import br.com.TrabalhoEngSoftware.chatbot.dto.RightWrongUserAnswerDTO;
 import br.com.TrabalhoEngSoftware.chatbot.entity.RightWrongQuestionEntity;
@@ -43,7 +46,27 @@ public class RightWrongQuestionHandler implements FlashcardTypeHandler<RightWron
 
   @Override
   public void evaluateAnswer(RightWrongQuestionEntity rightWrongQuestion, RightWrongUserAnswerDTO answer) {
-    // TODO: Fazer
+    LocalDateTime tomorrow = LocalDate.now().plusDays(1).atStartOfDay();
+    double easeFactor = rightWrongQuestion.getEaseFactor();
+
+    if(rightWrongQuestion.isRight() != answer.getAnswer()) {
+      if(LocalDateTime.now().plusMinutes(60L).isBefore(tomorrow)){
+        rightWrongQuestion.setNextReview(LocalDateTime.now().plusMinutes(60L));
+      } else {
+        rightWrongQuestion.setNextReview(LocalDate.now().atTime(LocalTime.MAX));
+      }
+      rightWrongQuestion.setEaseFactor(calculateEaseFactor(easeFactor, Constants.WRONG));
+      rightWrongQuestion.setInterval(1);
+    } else {
+      rightWrongQuestion.setNextReview(LocalDateTime.now().plusDays(rightWrongQuestion.getInterval()));
+      rightWrongQuestion.setEaseFactor(calculateEaseFactor(easeFactor, Constants.GOOD));
+      rightWrongQuestion.setInterval((int) Math.ceil(rightWrongQuestion.getInterval()*rightWrongQuestion.getEaseFactor()));
+    }
+  }
+
+  private double calculateEaseFactor(double easeFactor, int answer) {
+    double easeFactorTemp = easeFactor - 0.8 + (0.28*answer) - (0.02*Math.pow(answer,2));
+    return Math.max(Constants.MIN_EASE_FACTOR, easeFactorTemp);
   }
 
   @Override

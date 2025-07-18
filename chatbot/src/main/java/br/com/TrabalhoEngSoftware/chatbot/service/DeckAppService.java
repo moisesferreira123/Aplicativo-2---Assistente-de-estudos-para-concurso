@@ -7,7 +7,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+
+import br.com.TrabalhoEngSoftware.chatbot.entity.DiscursiveQuestionEntity;
+import br.com.TrabalhoEngSoftware.chatbot.entity.MultipleAnswersQuestionEntity;
+import br.com.TrabalhoEngSoftware.chatbot.entity.MultipleChoiceQuestionEntity;
+import br.com.TrabalhoEngSoftware.chatbot.entity.RightWrongQuestionEntity;
 import br.com.TrabalhoEngSoftware.chatbot.entity.StandardFlashcardEntity;
+import br.com.TrabalhoEngSoftware.chatbot.entity.TrueFalseQuestionEntity;
 import br.com.TrabalhoEngSoftware.chatbot.specification.DeckSpecification;
 import br.com.TrabalhoEngSoftwareFramework.framework.dto.DeckSummaryDTO;
 import br.com.TrabalhoEngSoftwareFramework.framework.entity.DeckEntity;
@@ -48,6 +54,21 @@ public class DeckAppService extends DeckService {
                                     if(flashcard.getFlashcardType().equals("STANDARD_FLASHCARD")) {
                                       StandardFlashcardEntity standardFlashcard = (StandardFlashcardEntity) flashcard;
                                       return standardFlashcard.getNextReview().isBefore(tomorrow);
+                                    } else if(flashcard.getFlashcardType().equals("TRUE_FALSE_QUESTION")) {
+                                      TrueFalseQuestionEntity standardFlashcard = (TrueFalseQuestionEntity) flashcard;
+                                      return standardFlashcard.getNextReview().isBefore(tomorrow);
+                                    } else if(flashcard.getFlashcardType().equals("RIGHT_WRONG_QUESTION")) {
+                                      RightWrongQuestionEntity standardFlashcard = (RightWrongQuestionEntity) flashcard;
+                                      return standardFlashcard.getNextReview().isBefore(tomorrow);
+                                    } else if(flashcard.getFlashcardType().equals("MULTIPLE_CHOICE_QUESTION")) {
+                                      MultipleChoiceQuestionEntity standardFlashcard = (MultipleChoiceQuestionEntity) flashcard;
+                                      return standardFlashcard.getNextReview().isBefore(tomorrow);
+                                    } else if(flashcard.getFlashcardType().equals("MULTIPLE_ANSWERS_QUESTION")) {
+                                      MultipleAnswersQuestionEntity standardFlashcard = (MultipleAnswersQuestionEntity) flashcard;
+                                      return standardFlashcard.getNextReview().isBefore(tomorrow);
+                                    } else if(flashcard.getFlashcardType().equals("DISCURSIVE_QUESTION")) {
+                                      DiscursiveQuestionEntity standardFlashcard = (DiscursiveQuestionEntity) flashcard;
+                                      return standardFlashcard.getNextReview().isBefore(tomorrow);
                                     }
                                     return false;
                                   })
@@ -66,6 +87,21 @@ public class DeckAppService extends DeckService {
                             .filter(flashcard -> {
                               if(flashcard.getFlashcardType().equals("STANDARD_FLASHCARD")) {
                                 StandardFlashcardEntity standardFlashcard = (StandardFlashcardEntity) flashcard;
+                                return standardFlashcard.getRepetition() >= repetitionMastery;
+                              } else if(flashcard.getFlashcardType().equals("TRUE_FALSE_QUESTION")) {
+                                TrueFalseQuestionEntity standardFlashcard = (TrueFalseQuestionEntity) flashcard;
+                                return standardFlashcard.getRepetition() >= repetitionMastery;
+                              } else if(flashcard.getFlashcardType().equals("RIGHT_WRONG_QUESTION")) {
+                                RightWrongQuestionEntity standardFlashcard = (RightWrongQuestionEntity) flashcard;
+                                return standardFlashcard.getRepetition() >= repetitionMastery;
+                              } else if(flashcard.getFlashcardType().equals("MULTIPLE_CHOICE_QUESTION")) {
+                                MultipleChoiceQuestionEntity standardFlashcard = (MultipleChoiceQuestionEntity) flashcard;
+                                return standardFlashcard.getRepetition() >= repetitionMastery;
+                              } else if(flashcard.getFlashcardType().equals("MULTIPLE_ANSWERS_QUESTION")) {
+                                MultipleAnswersQuestionEntity standardFlashcard = (MultipleAnswersQuestionEntity) flashcard;
+                                return standardFlashcard.getRepetition() >= repetitionMastery;
+                              } else if(flashcard.getFlashcardType().equals("DISCURSIVE_QUESTION")) {
+                                DiscursiveQuestionEntity standardFlashcard = (DiscursiveQuestionEntity) flashcard;
                                 return standardFlashcard.getRepetition() >= repetitionMastery;
                               }
                               return false;
