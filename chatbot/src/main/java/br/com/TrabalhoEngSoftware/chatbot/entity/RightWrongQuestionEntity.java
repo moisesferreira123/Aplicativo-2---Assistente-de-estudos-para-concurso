@@ -11,10 +11,10 @@ import jakarta.persistence.Entity;
 @DiscriminatorValue("RIGHT_WRONG_QUESTION")
 public class RightWrongQuestionEntity extends FlashcardEntity {
   
-  @Column(nullable = false)
+  @Column
   private String question;
 
-  @Column(nullable = false)
+  @Column
   private boolean isRight;
 
   @Column(nullable = false)

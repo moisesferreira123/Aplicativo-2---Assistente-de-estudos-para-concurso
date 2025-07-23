@@ -14,17 +14,17 @@ import jakarta.persistence.JoinColumn;
 @Entity
 @DiscriminatorValue("TRUE_FALSE_QUESTION")
 public class TrueFalseQuestionEntity extends FlashcardEntity {
-  @Column(nullable = false)
+  @Column
 	private String question;
 
   @ElementCollection
   @CollectionTable(name = "statements", joinColumns = @JoinColumn(name = "flashcard_id"))
-  @Column(nullable = false)
+  @Column
   private List<String> statements;
 
   @ElementCollection
   @CollectionTable(name = "statements", joinColumns = @JoinColumn(name = "flashcard_id"))
-  @Column(nullable = false)
+  @Column
   private List<Boolean> trueFalseAnswers;
 
   @Column(nullable = false)

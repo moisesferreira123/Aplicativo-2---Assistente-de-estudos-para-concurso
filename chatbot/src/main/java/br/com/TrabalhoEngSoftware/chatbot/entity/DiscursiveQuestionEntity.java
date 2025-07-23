@@ -10,10 +10,10 @@ import jakarta.persistence.Entity;
 @Entity
 @DiscriminatorValue("DISCURSIVE_QUESTION")
 public class DiscursiveQuestionEntity extends FlashcardEntity {
-  @Column(nullable = false)
+  @Column
 	private String question;
 
-  @Column(nullable = false)
+  @Column
 	private String exampleCorrectAnswer;
 
   @Column(nullable = false)

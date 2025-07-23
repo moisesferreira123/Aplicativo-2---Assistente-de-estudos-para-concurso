@@ -32,7 +32,7 @@ public interface FlashcardAppRepository extends FlashcardRepository {
     ORDER BY CASE
       WHEN TYPE(f) = StandardFlashcardEntity THEN TREAT(f AS StandardFlashcardEntity).nextReview
       WHEN TYPE(f) = TrueFalseQuestionEntity THEN TREAT(f AS TrueFalseQuestionEntity).nextReview
-      WHEN TYPE(f) = RightWrongQuestionEntity THEN TREAT(f AS RightWrongQuestionEntity).nextReviewv
+      WHEN TYPE(f) = RightWrongQuestionEntity THEN TREAT(f AS RightWrongQuestionEntity).nextReview
       WHEN TYPE(f) = MultipleChoiceQuestionEntity THEN TREAT(f AS MultipleChoiceQuestionEntity).nextReview
       WHEN TYPE(f) = MultipleAnswersQuestionEntity THEN TREAT(f AS MultipleAnswersQuestionEntity).nextReview
       WHEN TYPE(f) = DiscursiveQuestionEntity THEN TREAT(f AS DiscursiveQuestionEntity).nextReview
@@ -88,26 +88,25 @@ public interface FlashcardAppRepository extends FlashcardRepository {
 
   @Query("""
   SELECT f FROM FlashcardEntity f
-  WHERE f.deckEntity.id = :deckId
-    AND f.deckEntity.userEntity.id = :userId
+  WHERE f.deckEntity.userEntity.id = :userId
     AND (
-        (TYPE(f) = StandardFlashcardEntity AND TREAT(f AS StandardFlashcardEntity).nextReview BETWEEN :startOfDay AND :endOfDay)
+        (TYPE(f) = StandardFlashcardEntity AND TREAT(f AS StandardFlashcardEntity).nextReview < :tomorrow)
         OR
-        (TYPE(f) = TrueFalseQuestionEntity AND TREAT(f AS TrueFalseQuestionEntity).nextReview BETWEEN :startOfDay AND :endOfDay)
+        (TYPE(f) = TrueFalseQuestionEntity AND TREAT(f AS TrueFalseQuestionEntity).nextReview < :tomorrow)
         OR
-        (TYPE(f) = RightWrongQuestionEntity AND TREAT(f AS RightWrongQuestionEntity).nextReview BETWEEN :startOfDay AND :endOfDay)
+        (TYPE(f) = RightWrongQuestionEntity AND TREAT(f AS RightWrongQuestionEntity).nextReview < :tomorrow)
         OR
-        (TYPE(f) = MultipleChoiceQuestionEntity AND TREAT(f AS MultipleChoiceQuestionEntity).nextReview BETWEEN :startOfDay AND :endOfDay)
+        (TYPE(f) = MultipleChoiceQuestionEntity AND TREAT(f AS MultipleChoiceQuestionEntity).nextReview < :tomorrow)
         OR
-        (TYPE(f) = MultipleAnswersQuestionEntity AND TREAT(f AS MultipleAnswersQuestionEntity).nextReview BETWEEN :startOfDay AND :endOfDay)
+        (TYPE(f) = MultipleAnswersQuestionEntity AND TREAT(f AS MultipleAnswersQuestionEntity).nextReview < :tomorrow)
         OR
-        (TYPE(f) = DiscursiveQuestionEntity AND TREAT(f AS DiscursiveQuestionEntity).nextReview BETWEEN :startOfDay AND :endOfDay)
+        (TYPE(f) = DiscursiveQuestionEntity AND TREAT(f AS DiscursiveQuestionEntity).nextReview < :tomorrow)
     )
   ORDER BY 
     CASE
       WHEN TYPE(f) = StandardFlashcardEntity THEN TREAT(f AS StandardFlashcardEntity).nextReview
       WHEN TYPE(f) = TrueFalseQuestionEntity THEN TREAT(f AS TrueFalseQuestionEntity).nextReview
-      WHEN TYPE(f) = RightWrongQuestionEntity THEN TREAT(f AS RightWrongQuestionEntity).nextReviewv
+      WHEN TYPE(f) = RightWrongQuestionEntity THEN TREAT(f AS RightWrongQuestionEntity).nextReview
       WHEN TYPE(f) = MultipleChoiceQuestionEntity THEN TREAT(f AS MultipleChoiceQuestionEntity).nextReview
       WHEN TYPE(f) = MultipleAnswersQuestionEntity THEN TREAT(f AS MultipleAnswersQuestionEntity).nextReview
       WHEN TYPE(f) = DiscursiveQuestionEntity THEN TREAT(f AS DiscursiveQuestionEntity).nextReview

@@ -1,9 +1,12 @@
 package br.com.TrabalhoEngSoftware.chatbot.handler;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 import org.springframework.stereotype.Component;
 
+import br.com.TrabalhoEngSoftware.chatbot.config.Constants;
 import br.com.TrabalhoEngSoftware.chatbot.dto.MultipleAnswersQuestionDTO;
 import br.com.TrabalhoEngSoftware.chatbot.dto.MultipleAnswersUserAnswerDTO;
 import br.com.TrabalhoEngSoftware.chatbot.entity.MultipleAnswersQuestionEntity;
@@ -45,7 +48,52 @@ public class MultipleAnswersQuestionHandler implements FlashcardTypeHandler<Mult
 
   @Override
   public void evaluateAnswer(MultipleAnswersQuestionEntity multipleAnswersQuestion, MultipleAnswersUserAnswerDTO answer) {
-    // TODO: Fazer
+    for (Integer index : answer.getOptionsChosen()) {
+      if (index < 0 || index >= multipleAnswersQuestion.getAnswerOptions().size()) {
+        throw new InvalidObjectDataException("Correct answer index " + index + " is out of bounds for the provided options.");
+      }
+    }
+
+    LocalDateTime tomorrow = LocalDate.now().plusDays(1).atStartOfDay();
+    double correctAnswers = 0, wrongAnswers = 0;
+    for(Integer userAnswerIndex: answer.getOptionsChosen()) {
+      if(multipleAnswersQuestion.getCorrectAnswerIndices().contains(userAnswerIndex)) {
+        correctAnswers++;
+      } else {
+        wrongAnswers++;
+      }
+    }
+
+    wrongAnswers += multipleAnswersQuestion.getCorrectAnswerIndices().size()-correctAnswers;
+    correctAnswers = multipleAnswersQuestion.getAnswerOptions().size() - wrongAnswers;
+    
+    double correctPercentage = correctAnswers/multipleAnswersQuestion.getAnswerOptions().size();
+    double easeFactor = multipleAnswersQuestion.getEaseFactor();
+
+    if(correctPercentage <= 0.3) {
+      if(LocalDateTime.now().plusMinutes(60L).isBefore(tomorrow)){
+        multipleAnswersQuestion.setNextReview(LocalDateTime.now().plusMinutes(60L));
+      } else {
+        multipleAnswersQuestion.setNextReview(LocalDate.now().atTime(LocalTime.MAX));
+      }
+      multipleAnswersQuestion.setEaseFactor(calculateEaseFactor(easeFactor, Constants.WRONG));
+      multipleAnswersQuestion.setInterval(1);
+      return;
+    }
+    multipleAnswersQuestion.setNextReview(LocalDateTime.now().plusDays(multipleAnswersQuestion.getInterval()));
+    if(correctPercentage < 0.7) {
+      multipleAnswersQuestion.setEaseFactor(calculateEaseFactor(easeFactor, Constants.HARD));
+    } else if(correctPercentage < 1) {
+      multipleAnswersQuestion.setEaseFactor(calculateEaseFactor(easeFactor, Constants.GOOD));
+    } else {
+      multipleAnswersQuestion.setEaseFactor(calculateEaseFactor(easeFactor, Constants.EASY));
+    }
+    multipleAnswersQuestion.setInterval((int) Math.ceil(multipleAnswersQuestion.getInterval()*multipleAnswersQuestion.getEaseFactor()));
+  }
+
+  private double calculateEaseFactor(double easeFactor, int answer) {
+    double easeFactorTemp = easeFactor - 0.8 + (0.28*answer) - (0.02*Math.pow(answer,2));
+    return Math.max(Constants.MIN_EASE_FACTOR, easeFactorTemp);
   }
 
   @Override

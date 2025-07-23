@@ -11,10 +11,10 @@ import jakarta.persistence.Entity;
 @DiscriminatorValue("STANDARD_FLASHCARD")
 public class StandardFlashcardEntity extends FlashcardEntity {
 
-  @Column(nullable = false)
+  @Column
 	private String front;
 	
-	@Column(nullable = false)
+	@Column
 	private String back;
 
   @Column(nullable = false)

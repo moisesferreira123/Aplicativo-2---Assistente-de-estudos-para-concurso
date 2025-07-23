@@ -54,7 +54,7 @@ public class TrueFalseQuestionHandler implements FlashcardTypeHandler<TrueFalseQ
     }
 
     LocalDateTime tomorrow = LocalDate.now().plusDays(1).atStartOfDay();
-    float numberCorrectAnswer = 0;
+    double numberCorrectAnswer = 0;
     List<Boolean> answersList = trueFalseQuestion.getTrueFalseAnswers();
     List<Boolean> userAnswersList = answer.getAnswerList();
     

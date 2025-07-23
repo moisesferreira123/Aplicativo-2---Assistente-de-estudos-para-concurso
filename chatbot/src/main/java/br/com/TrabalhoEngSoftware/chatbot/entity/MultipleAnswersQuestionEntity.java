@@ -2,6 +2,7 @@ package br.com.TrabalhoEngSoftware.chatbot.entity;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 import br.com.TrabalhoEngSoftwareFramework.framework.entity.FlashcardEntity;
 import jakarta.persistence.CollectionTable;
@@ -14,18 +15,18 @@ import jakarta.persistence.JoinColumn;
 @Entity
 @DiscriminatorValue("MULTIPLE_ANSWERS_QUESTION")
 public class MultipleAnswersQuestionEntity extends FlashcardEntity {
-  @Column(nullable = false)
+  @Column
 	private String question;
 
   @ElementCollection
   @CollectionTable(name = "multiple_answer_options", joinColumns = @JoinColumn(name = "flashcard_id"))
-  @Column(nullable = false)
+  @Column
   private List<String> answerOptions;
 
   @ElementCollection
   @CollectionTable(name = "correct-answer-indices", joinColumns = @JoinColumn(name = "flashcard_id"))
-  @Column(nullable = false)
-	private List<Integer> correctAnswerIndices;
+  @Column
+	private Set<Integer> correctAnswerIndices;
 
   @Column(nullable = false)
 	private LocalDateTime nextReview;
@@ -67,11 +68,11 @@ public class MultipleAnswersQuestionEntity extends FlashcardEntity {
     this.answerOptions = answerOptions;
   }
 
-  public List<Integer> getCorrectAnswerIndices() {
+  public Set<Integer> getCorrectAnswerIndices() {
     return correctAnswerIndices;
   }
 
-  public void setCorrectAnswerIndices(List<Integer> correctAnswerIndices) {
+  public void setCorrectAnswerIndices(Set<Integer> correctAnswerIndices) {
     this.correctAnswerIndices = correctAnswerIndices;
   }
 

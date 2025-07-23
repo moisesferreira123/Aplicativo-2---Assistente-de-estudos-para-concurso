@@ -2,6 +2,7 @@ package br.com.TrabalhoEngSoftware.chatbot.dto;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 import br.com.TrabalhoEngSoftwareFramework.framework.dto.FlashcardDTO;
 
@@ -9,7 +10,7 @@ public class MultipleAnswersQuestionDTO extends FlashcardDTO {
 	
   private String question;
   private List<String> answerOptions;
-	private List<Integer> correctAnswerIndices;
+	private Set<Integer> correctAnswerIndices;
 	private LocalDateTime nextReview;
 	private int repetition;
 	private double easeFactor;
@@ -36,11 +37,11 @@ public class MultipleAnswersQuestionDTO extends FlashcardDTO {
     this.answerOptions = answerOptions;
   }
 
-  public List<Integer> getCorrectAnswerIndices() {
+  public Set<Integer> getCorrectAnswerIndices() {
     return correctAnswerIndices;
   }
 
-  public void setCorrectAnswerIndices(List<Integer> correctAnswerIndices) {
+  public void setCorrectAnswerIndices(Set<Integer> correctAnswerIndices) {
     this.correctAnswerIndices = correctAnswerIndices;
   }
 

@@ -1,16 +1,11 @@
-export async function fetchCreateFlashcard(type, front, back, flashcardType, deckId, token) {
+export async function fetchCreateFlashcard(data, deckId, token) {
   const response = await fetch(`http://localhost:8080/api/flashcards/${deckId}`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${token}`
     },
-    body: JSON.stringify({
-        type: type, 
-        front: front,
-        back: back,
-        flashcardType: flashcardType
-    })
+    body: JSON.stringify(data)
   });
   if(!response.ok){
     const errorMessage = await response.json();

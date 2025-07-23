@@ -1,27 +1,27 @@
 package br.com.TrabalhoEngSoftware.chatbot.dto;
 
-import java.util.List;
+import java.util.Set;
 
 import br.com.TrabalhoEngSoftwareFramework.framework.dto.UserAnswerDTO;
 
 public class MultipleAnswersUserAnswerDTO extends UserAnswerDTO {
   
-  private List<Integer> optionsChosen;
+  private Set<Integer> optionsChosen;
 
   public MultipleAnswersUserAnswerDTO() {
     super();
   }
 
-  public MultipleAnswersUserAnswerDTO(Long flashcardId, String flashcardType, List<Integer> optionsChosen) {
+  public MultipleAnswersUserAnswerDTO(Long flashcardId, String flashcardType, Set<Integer> optionsChosen) {
     super(flashcardId, flashcardType);
     this.optionsChosen = optionsChosen;
   }
 
-  public List<Integer> getOptionsChosen() {
+  public Set<Integer> getOptionsChosen() {
     return optionsChosen;
   }
 
-  public void setOptionsChosen(List<Integer> optionsChosen) {
+  public void setOptionsChosen(Set<Integer> optionsChosen) {
     this.optionsChosen = optionsChosen;
   }
 }

@@ -14,15 +14,15 @@ import jakarta.persistence.JoinColumn;
 @Entity
 @DiscriminatorValue("MULTIPLE_CHOICE_QUESTION")
 public class MultipleChoiceQuestionEntity extends FlashcardEntity {
-  @Column(nullable = false)
+  @Column
 	private String question;
 
   @ElementCollection
   @CollectionTable(name = "multiple_choice_options", joinColumns = @JoinColumn(name = "flashcard_id"))
-  @Column(nullable = false)
+  @Column
   private List<String> answerOptions;
 
-  @Column(nullable = false)
+  @Column
 	private int correctAnswerIndex;
 
   @Column(nullable = false)
